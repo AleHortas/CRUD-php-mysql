@@ -35,7 +35,7 @@ header('Expires: 0');
         <?php include('./theme/insert-ui.php'); ?>
 
         <h2>Dashboard</h2>
-        <table id="myTable" class="table datatable">
+        <table class="table datatable">
             <thead>
                 <tr>
                     <th>ID</th>

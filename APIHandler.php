@@ -66,7 +66,7 @@ class APIHandler
 
     public function handlePost()
     {
-        // check if data is sent
+        // check if it is a POST request
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);
@@ -85,7 +85,7 @@ class APIHandler
         $star1 = $_POST['star1'] ?? '';
         $star2 = $_POST['star2'] ?? '';
 
-        // validate required fields
+        // validate if fields are empty
         $requiredFields = ['poster_link', 'series_title', 'released_year', 'runtime', 'genre', 'imdb_rating', 'overview', 'director', 'star1', 'star2'];
         foreach ($requiredFields as $field) {
             if (empty($$field)) {
@@ -111,10 +111,35 @@ class APIHandler
 
     public function handlePut()
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+            http_response_code(405);
+            echo json_encode(['message' => 'Method not allowed']);
+            return;
+        }
+
+        
     }
+
 
     public function handleDelete()
     {
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+            http_response_code(405);
+            echo json_encode(['message' => 'Method not allowed']);
+            return;
+        }
+
+        try {
+            $stmt = $this->conn->prepare("DELETE FROM movies_table WHERE id = ?");
+            $stmt->execute([$id]);
+            http_response_code(200);
+            echo json_encode(['message' => 'Movie deleted successfully']);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'Error while deleting the movie', 'error' => $e->getMessage()]);
+        }
     }
 }
 
