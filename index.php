@@ -56,8 +56,8 @@ header('Expires: 0');
 
             <tbody>
                 <!-- if $movies is an array and has elements in it, it loops through each movie in the array using foreach($array as $variable-that-will-be-filled-with-the-array-element['specify']).-->
-                <?php if (is_array($movies) && count($movies) > 0): ?>
-                    <?php foreach ($movies as $movie): ?>
+                <?php if (is_array($movies) && count($movies) > 0) : ?>
+                    <?php foreach ($movies as $movie) : ?>
                         <tr>
                             <td><?php echo $movie['id']; ?></td>
                             <td><img src="<?php echo $movie['poster_link']; ?>" alt="Poster of <?php echo $movie['series_title']; ?>" style="width:100px; height:auto;"></td>
@@ -72,7 +72,8 @@ header('Expires: 0');
                             <td><?php echo $movie['star2']; ?></td>
                             <td class="text-right">
                                 <a href="#" title="Edit this record">Update</a>
-                                <a href="#" class="text-danger" title="Delete this record" onClick="return confirm('This will delete it permanentrly');">Delete</a>
+                                <a href="" class="text-danger" title="Delete this record" class="text-danger" onclick="deleteMovie(<?php echo $movie['id']; ?>)">Delete</a>
+
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -80,8 +81,8 @@ header('Expires: 0');
             </tbody>
         </table>
     </div>
-
     <?php include('theme/footer-scripts.php') ?>
+    <script src="./js/api.js"></script>
 </body>
 
 </html>
