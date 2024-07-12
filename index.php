@@ -23,6 +23,7 @@ header('Expires: 0');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies DB</title>
+    <link rel="icon" type="image/x-icon" href="/cac_final/assets/img/favicon.ico">
     <?php include('theme/header-scripts.php'); ?>
 </head>
 
@@ -30,12 +31,13 @@ header('Expires: 0');
     <?php include('./theme/header.php'); ?>
 
     <div class="container-fluid">
-        <h1>Welcome 🌞</h1>
+    <span id="direct"></span>
+    <h1>Movies Database</h1>
 
-        <?php include('./theme/insert-ui.php'); ?>
+        <?php include('./theme/form.php'); ?>
 
         <h2>Dashboard</h2>
-        <table class="table datatable">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
