@@ -1,7 +1,7 @@
 <section id="form-tool" class="col-md-8 border p-4 mb-4">
     <h2>Movie Manager</h2>
     <form id="movieForm" action="" method="post" class="needs-validation" novalidate>
-        <input type="hidden" name="movie_id" id="movie_id" value="">
+        <input type="hidden" name="id" id="id" value="">
         <!-- name value must match db-->
         <div class="row justify-content-start pt-4">
             <div class="col-md-4">
@@ -65,6 +65,7 @@
                 <br>
             </div>
         </div>
-        <button name="btnInsert" class="btn btn-danger border-none">Save Record</button>
+        <button type="button" onclick="createMovie()" class="btn btn-primary">Create</button>
+        <button type="button" onclick="updateMovie()" class="btn btn-warning">Update</button>
     </form>
 </section>

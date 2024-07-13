@@ -66,13 +66,6 @@ class APIHandler
 
     public function handlePost()
     {
-        // check if it is a POST request
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['message' => 'Method not allowed']);
-            return;
-        }
-
         // extract data from POST
         $poster_link = $_POST['poster_link'] ?? '';
         $series_title = $_POST['series_title'] ?? '';
@@ -111,25 +104,76 @@ class APIHandler
 
     public function handlePut()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-            http_response_code(405);
-            echo json_encode(['message' => 'Method not allowed']);
-            return;
-        }
 
-        
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+        if ($id > 0)
+        {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $movie = Movies::fromArray($data);
+            $movie->id = $id;
+
+            $fields = [];
+            $prmt = [];
+
+            if ($movie->poster_link !== null) {
+                $fields[] = 'poster_link = ?';
+                $prmt[] = $movie->poster_link;
+            }
+            if ($movie->series_title !== null) {
+                $fields[] = 'series_title = ?';
+                $prmt[] = $movie->series_title;
+            }
+            if ($movie->released_year !== null) {
+                $fields[] = 'released_year = ?';
+                $prmt[] = $movie->released_year;
+            }
+            if ($movie->runtime !== null) {
+                $fields[] = 'runtime = ?';
+                $prmt[] = $movie->runtime;
+            }
+            if ($movie->genre !== null) {
+                $fields[] = 'genre = ?';
+                $prmt[] = $movie->genre;
+            }
+            if ($movie->imdb_rating !== null) {
+                $fields[] = 'imdb_rating = ?';
+                $prmt[] = $movie->imdb_rating;
+            }
+            if ($movie->overview !== null) {
+                $fields[] = 'overview = ?';
+                $prmt[] = $movie->overview;
+            }
+            if ($movie->director !== null) {
+                $fields[] = 'director = ?';
+                $prmt[] = $movie->director;
+            }
+            if ($movie->star1 !== null) {
+                $fields[] = 'star1 = ?';
+                $prmt[] = $movie->star1;
+            }
+            if ($movie->star2 !== null) {
+                $fields[] = 'star2 = ?';
+                $prmt[] = $movie->star2;
+            }
+            
+            if (!empty($fields)) {
+                $prmt[] = $id;
+                $stmt = $this->conn->prepare("UPDATE movies_table SET " . implode(', ', $fields) . " WHERE id = ?");
+                $stmt->execute($prmt);
+                echo json_encode(['message' => 'Movie updated successfully']);
+            } else {
+                echo json_encode(['message' => 'No data to update']);
+            }
+        } else {
+            echo json_encode(['message' => 'ID not provided']);
+        }
     }
 
 
     public function handleDelete()
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-            http_response_code(405);
-            echo json_encode(['message' => 'Method not allowed']);
-            return;
-        }
 
         try {
             $stmt = $this->conn->prepare("DELETE FROM movies_table WHERE id = ?");
